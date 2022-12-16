@@ -1,0 +1,91 @@
+package com.controller;
+
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.dto.VilleDTO;
+import com.model.Coordonnee;
+import com.model.Ville;
+import com.service.VilleService;
+
+@Controller
+public class ApplicationController {
+
+	@Autowired
+	public VilleService villeService;
+
+	@GetMapping(value = "/")
+	public String home(@ModelAttribute VilleDTO villeADTO, @ModelAttribute VilleDTO villeBDTO, Model model) throws Exception {
+		List<Ville> villes = villeService.getVilles();
+		model.addAttribute("villes", villes);
+		
+		return "home";
+	}
+	
+	@PostMapping(value = "/")
+	public String postDistance(Model model, @ModelAttribute("villeA") String strVilleA, @ModelAttribute("villeB") String strVilleB) throws Exception {
+		model.addAttribute("villes", villeService.getVilles());
+		
+		String codeCommuneVilleA = StringUtils.substringBetween(strVilleA, "codeCommune=", ", nomCommune");
+		String codeCommuneVilleB = StringUtils.substringBetween(strVilleB, "codeCommune=", ", nomCommune");
+
+		Ville villeA = villeService.getVilleByCodeCommune(codeCommuneVilleA);
+		Ville villeB = villeService.getVilleByCodeCommune(codeCommuneVilleB);
+		String distance = villeService.getDistance(villeA, villeB);
+		
+//		System.out.println("La distance entre les villes " + villeA.getNomCommune() + " et " + villeB.getNomCommune() + " est : " + distance);
+		
+		model.addAttribute("villeA", villeA);
+		model.addAttribute("villeB", villeB);
+		model.addAttribute("distance", distance);
+
+		return "home";
+	}
+
+	@GetMapping(value = "/listVilles")
+	public String listVilles(Model model) throws Exception {
+		List<Ville> villes = villeService.getVilles();
+		model.addAttribute("villes", villes);
+		
+		return "listVilles";
+	}
+	
+	@GetMapping(value = "/listVilles/{codeCommune}")
+	public String getVilleModify(@PathVariable(value = "codeCommune") String codeCommune, Model model) throws Exception {
+		Ville ville = villeService.getVilleByCodeCommune(codeCommune);
+		Coordonnee coordonnee = ville.getCoordonnee();
+		
+		model.addAttribute("ville", ville);
+		model.addAttribute("coordonnee", coordonnee);
+		
+		return "villeModify";
+	}
+	
+	@PostMapping(value = "/listVilles/{codeCommune}")
+	public String postVilleModify(Model model, @ModelAttribute(value = "codeCommune") String codeCommune, @ModelAttribute("nomCommune") String nomCommune, @ModelAttribute("codePostal") String codePostal, @ModelAttribute("libelleAcheminement") String libelleAcheminement, @ModelAttribute("ligne") String ligne, @ModelAttribute("latitude") String latitude, @ModelAttribute("longitude") String longitude) throws Exception {
+		Ville ville = villeService.getVilleByCodeCommune(codeCommune);
+		Coordonnee coordonnee = ville.getCoordonnee();
+				
+		model.addAttribute("ville", ville);
+		model.addAttribute("coordonnee", coordonnee);
+
+		villeService.putVille(codeCommune, nomCommune, codePostal, libelleAcheminement, ligne, latitude, longitude);
+		
+		return "redirect:/listVilles";
+	}
+	
+	@PostMapping(value = "/listVilles/{codeCommune}/delete")
+    public String postVilleDelete(@PathVariable String codeCommune) throws Exception {
+    	villeService.deleteVille(codeCommune);
+        
+        return "redirect:/listVilles";
+    }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Accueil</title>
+<link th:href="@{/css/home.css}" rel="stylesheet" type="text/css"
+	media="all" />
+</head>
+<body>
+	<div>
+		<div th:replace="fragments/header"></div>
+	</div>
+	<h1>Hello World !</h1>
+
+	<form th:action="@{/}" method="post">
+		<select modelAttribute="villeA" name="villeA" id="villeA">
+			<option value="" hidden>Sélectionner une ville</option>
+			<option th:each="ville: ${villes}" th:value="${ville}"
+				th:text="${ville.nomCommune}"></option>
+		</select> <select modelAttribute="villeB" name="villeB" id="villeB">
+			<option value="" hidden>Sélectionner une ville</option>
+			<option th:each="ville: ${villes}" th:value="${ville}"
+				th:text="${ville.nomCommune}"></option>
+		</select>
+		
+		<button name="submit"
+			value="submit">Calculer la distance
+		</button>
+		
+	</form>
+	
+	<div th:if="${distance != null}">
+		<div th:text="'La distance entre ' + ${villeA.nomCommune} + ' et ' + ${villeB.nomCommune} + ' vaut : ' + ${distance} + ' km.'"></div>
+	</div>
+	
+</body>
+</html>
