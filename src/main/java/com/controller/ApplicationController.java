@@ -44,11 +44,6 @@ public class ApplicationController {
 			Ville villeA = villeService.getVilleByCodeCommune(codeCommuneVilleA);
 			Ville villeB = villeService.getVilleByCodeCommune(codeCommuneVilleB);
 		
-//		if (villeA.equals(villeB)) {
-//			model.addAttribute("error", "Ce nom de tutoriel est déjà utilisé. Veuillez en choisir un autre.");
-//			return "redirect:/home";
-//		}
-		
 			String distance = villeService.getDistance(villeA, villeB);
 		
 			model.addAttribute("villeA", villeA);
@@ -57,7 +52,7 @@ public class ApplicationController {
 			
 		} catch (JSONException e) {
 			if (e.getMessage() != null) {
-				model.addAttribute("error", "Sélectionner deux villes de la liste pour continuer.");
+				model.addAttribute("error", "Veillez à sélectionner deux villes de la liste pour le calcul de distance.");
 				return "home";
 			} else {
 				System.out.println(e.getMessage());

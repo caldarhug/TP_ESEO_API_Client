@@ -2,24 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
 <head>
-<th:block th:replace="fragments/general_configuration :: head_conf"></th:block>
-<meta charset="UTF-8">
-<title>Accueil</title>
-<link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"
-	media="all" />
+	<th:block th:replace="fragments/general_configuration :: head_conf"></th:block>
+	<title>Accueil</title>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<div th:replace="fragments/header.html"></div>
+	<header th:replace="fragments/header.html"></header>
 
 	<main class="container-fluid flex-fill">
 	
 		<div th:if="${error != null}">
-			<div class="alert alert-danger alert-dismissible mx-5 mt-4 d-flex"
-				role="alert">
-				<div th:text="'Erreur : '+${error}"></div>
+			<div class="alert alert-danger alert-dismissible mx-5 mt-4 d-flex" role="alert">
+				<div th:text="'Attention : ' + ${error}"></div>
 				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
+					aria-label="Close">
+				</button>
 			</div>
 		</div>
 		
@@ -51,15 +48,18 @@
 					</div>
 				</form>
 
-				<div th:if="${distance != null}">
-					<div
-						th:text="'La distance entre ' + ${villeA.nomCommune} + ' et ' + ${villeB.nomCommune} + ' vaut : ' + ${distance} + ' km.'">
+				<div class="mt-4" th:if="${distance != null}">
+					<div class="h4"
+						th:text="'La distance entre ' + ${villeA.nomCommune} + ' et ' + ${villeB.nomCommune} + ' est de : ' + ${distance} + ' km.'">
 					</div>
 				</div>
 				
 			</div>
 		</div>
+		
 	</main>
+	
+	<footer th:replace="fragments/footer.html"></footer>
 
 </body>
 </html>

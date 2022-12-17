@@ -2,88 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
 <head>
-<th:block th:replace="fragments/general_configuration :: head_conf"></th:block>
-<meta charset="UTF-8">
-<title>Modification de ville</title>
-<link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"
-	media="all" />
+	<th:block th:replace="fragments/general_configuration :: head_conf"></th:block>
+	<title>Modification de ville</title>
+	
+	<style>
+	td {
+		padding: 0 15px;
+	}
+	</style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<div th:replace="fragments/header.html"></div>
+	<header th:replace="fragments/header.html"></header>
 	
 	<main class="container-fluid flex-fill">
 		<div class="container">
 			<div class="row mt-3">
+			
 				<h2 th:text="'Modification de la ville de ' + ${ville.nomCommune}"></h2>
-				<div class="col">
+				
+				<div class="col mt-2">
 					<form th:action="@{/listVilles/{codeCommune} (codeCommune=${ville.codeCommune})}"
 						method="post">
-			
 						<table id="tableModificationVille">
-						
 							<tr>
-								<td>Code commune</td>
+								<td>Code commune :</td>
 								<td>
-									<input class="form-group form-control" disabled type="text" id="codeCommune" name="codeCommune"
+									<input class="form-group form-control mx-5" disabled type="text" id="codeCommune" name="codeCommune"
 									placeholder="Code commune*" th:field="*{ville.codeCommune}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Nom</td>
+								<td>Nom :</td>
 								<td>
-									<input class="form-group form-control" required="required" type="text" id="nomCommune" name="nomCommune"
+									<input class="form-group form-control mx-5" required="required" type="text" id="nomCommune" name="nomCommune"
 									placeholder="Nom*" th:field="*{ville.nomCommune}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Code postal</td>
+								<td>Code postal :</td>
 								<td>
-									<input class="form-group form-control" required="required" type="text" id="codePostal" name="codePostal"
+									<input class="form-group form-control mx-5" required="required" type="text" id="codePostal" name="codePostal"
 									placeholder="Code postal*" th:field="*{ville.codePostal}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Libelle</td>
+								<td>Libelle :</td>
 								<td>
-									<input class="form-group form-control" type="text" id="libelleAcheminement" name="libelleAcheminement"
+									<input class="form-group form-control mx-5" type="text" id="libelleAcheminement" name="libelleAcheminement"
 									placeholder="Libelle*" th:field="*{ville.libelleAcheminement}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Ligne</td>
+								<td>Ligne :</td>
 								<td>
-									<input class="form-group form-control" type="text" id="ligne" name="ligne"
+									<input class="form-group form-control mx-5" type="text" id="ligne" name="ligne"
 									placeholder="Ligne*" th:field="*{ville.ligne}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Latitude</td>
+								<td>Latitude :</td>
 								<td>
-									<input class="form-group form-control" type="text" id="latitude" name="latitude"
+									<input class="form-group form-control mx-5" type="text" id="latitude" name="latitude"
 									placeholder="Latitude*" th:field="*{coordonnee.latitude}" />
 								</td>
 							</tr>
 							
 							<tr>
-								<td>Longitude</td>
+								<td>Longitude :</td>
 								<td>
-									<input class="form-group form-control" type="text" id="longitude" name="longitude"
+									<input class="form-group form-control mx-5" type="text" id="longitude" name="longitude"
 									placeholder="Longitude*" th:field="*{coordonnee.longitude}" />
 								</td>
 							</tr>
-	
 						</table>
 						
 						<div class="mt-3 mb-3 d-flex flex-lg-row flex-column justify-content-around">
 							<button class="btn btn-primary btn-lg" type="button" onclick="history.back()" id="cancel"><i class="bi bi-arrow-left-circle-fill"></i> Retour</button>
 							<button class="btn btn-primary btn-lg" type="submit" id="villeSubmit" name="villeSubmit" value="villeSubmit"><i class="bi bi-pencil-fill"></i> Modifier la ville</button>
-							<button class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#deletionModal"><i class="bi bi-trash-fill"></i> Supprimer la ville</button>
+							<button class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="bi bi-trash-fill"></i> Supprimer la ville</button>
 						</div>
 						
 					</form>
@@ -92,17 +94,20 @@
 						<div class="modal-dialog">
 							<div class="modal-content bg-dark">
 								<div class="modal-header">
-									<h5 class="modal-title" id="deletionModalLabel">Suppression
-										de la ville</h5>
+									<h5 class="modal-title" id="deletionModalLabel">
+										Suppression de la ville
+									</h5>
 									<button type="button" class="btn-close btn-close-white"
-										data-bs-dismiss="modal" aria-label="Annuler"></button>
+										data-bs-dismiss="modal" aria-label="Annuler">
+									</button>
 								</div>
 								<div class="modal-body">
 									<p>Confirmer la suppression de la ville ?</p>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary"
-										data-bs-dismiss="modal">Annuler</button>
+										data-bs-dismiss="modal">Annuler
+									</button>
 									<form method="post" th:action="@{/listVilles/{codeCommune}/delete (codeCommune=${ville.codeCommune})}">
 										<button type="submit" class="btn btn-primary">Confirmer</button>
 									</form>
@@ -111,10 +116,12 @@
 						</div>
 					</div>
 				</div>
+			
 			</div>
-		
 		</div>
 	</main>
+	
+	<footer th:replace="fragments/footer.html"></footer>
 
 </body>
 </html>
