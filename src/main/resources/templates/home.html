@@ -1,37 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
 <head>
+<th:block th:replace="fragments/general_configuration :: head_conf"></th:block>
 <meta charset="UTF-8">
 <title>Accueil</title>
-<link th:href="@{/css/home.css}" rel="stylesheet" type="text/css"
+<link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"
 	media="all" />
 </head>
-<body>
-	<div>
-		<div th:replace="fragments/header"></div>
-	</div>
-	<h1>Hello World !</h1>
 
-	<form th:action="@{/}" method="post">
-		<select modelAttribute="villeA" name="villeA" id="villeA">
-			<option value="" hidden>Sélectionner une ville</option>
-			<option th:each="ville: ${villes}" th:value="${ville}"
-				th:text="${ville.nomCommune}"></option>
-		</select> <select modelAttribute="villeB" name="villeB" id="villeB">
-			<option value="" hidden>Sélectionner une ville</option>
-			<option th:each="ville: ${villes}" th:value="${ville}"
-				th:text="${ville.nomCommune}"></option>
-		</select>
-		
-		<button name="submit"
-			value="submit">Calculer la distance
-		</button>
-		
-	</form>
+<body class="d-flex flex-column min-vh-100">
+	<div th:replace="fragments/header.html"></div>
+
+	<main class="container-fluid flex-fill">
 	
-	<div th:if="${distance != null}">
-		<div th:text="'La distance entre ' + ${villeA.nomCommune} + ' et ' + ${villeB.nomCommune} + ' vaut : ' + ${distance} + ' km.'"></div>
-	</div>
-	
+		<div th:if="${error != null}">
+			<div class="alert alert-danger alert-dismissible mx-5 mt-4 d-flex"
+				role="alert">
+				<div th:text="'Erreur : '+${error}"></div>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"
+					aria-label="Close"></button>
+			</div>
+		</div>
+		
+		<div class="container">
+			<div class="row mt-3">
+
+				<h1>Calcul de distance entre deux villes</h1>
+
+				<form th:action="@{/}" method="post">
+					<div class="mt-2 mb-4 d-flex justify-content-around">
+						<select modelAttribute="villeA" name="villeA" id="villeA">
+							<option value="" hidden>Sélectionner une ville</option>
+							<option th:each="ville: ${villes}" th:value="${ville}"
+								th:text="${ville.nomCommune}"></option>
+						</select> 
+					
+						<select modelAttribute="villeB" name="villeB" id="villeB">
+							<option value="" hidden>Sélectionner une ville</option>
+							<option th:each="ville: ${villes}" th:value="${ville}"
+								th:text="${ville.nomCommune}"></option>
+						</select>
+					</div>
+
+					<div class="d-flex justify-content-center">
+						<button class="btn btn-primary btn-lg" type="submit" 
+						id="distance_submit" name="distanceSubmit" value="distanceSubmit">
+							Calculer la distance
+						</button>
+					</div>
+				</form>
+
+				<div th:if="${distance != null}">
+					<div
+						th:text="'La distance entre ' + ${villeA.nomCommune} + ' et ' + ${villeB.nomCommune} + ' vaut : ' + ${distance} + ' km.'">
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</main>
+
 </body>
 </html>

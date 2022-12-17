@@ -1,8 +1,11 @@
 package com.controller;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
+import org.apache.catalina.filters.ExpiresFilter.XServletOutputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,18 +37,32 @@ public class ApplicationController {
 	public String postDistance(Model model, @ModelAttribute("villeA") String strVilleA, @ModelAttribute("villeB") String strVilleB) throws Exception {
 		model.addAttribute("villes", villeService.getVilles());
 		
-		String codeCommuneVilleA = StringUtils.substringBetween(strVilleA, "codeCommune=", ", nomCommune");
-		String codeCommuneVilleB = StringUtils.substringBetween(strVilleB, "codeCommune=", ", nomCommune");
-
-		Ville villeA = villeService.getVilleByCodeCommune(codeCommuneVilleA);
-		Ville villeB = villeService.getVilleByCodeCommune(codeCommuneVilleB);
-		String distance = villeService.getDistance(villeA, villeB);
+		try {
+			String codeCommuneVilleA = StringUtils.substringBetween(strVilleA, "codeCommune=", ", nomCommune");
+			String codeCommuneVilleB = StringUtils.substringBetween(strVilleB, "codeCommune=", ", nomCommune");
+	
+			Ville villeA = villeService.getVilleByCodeCommune(codeCommuneVilleA);
+			Ville villeB = villeService.getVilleByCodeCommune(codeCommuneVilleB);
 		
-//		System.out.println("La distance entre les villes " + villeA.getNomCommune() + " et " + villeB.getNomCommune() + " est : " + distance);
+//		if (villeA.equals(villeB)) {
+//			model.addAttribute("error", "Ce nom de tutoriel est déjà utilisé. Veuillez en choisir un autre.");
+//			return "redirect:/home";
+//		}
 		
-		model.addAttribute("villeA", villeA);
-		model.addAttribute("villeB", villeB);
-		model.addAttribute("distance", distance);
+			String distance = villeService.getDistance(villeA, villeB);
+		
+			model.addAttribute("villeA", villeA);
+			model.addAttribute("villeB", villeB);
+			model.addAttribute("distance", distance);
+			
+		} catch (JSONException e) {
+			if (e.getMessage() != null) {
+				model.addAttribute("error", "Sélectionner deux villes de la liste pour continuer.");
+				return "home";
+			} else {
+				System.out.println(e.getMessage());
+			}
+		}
 
 		return "home";
 	}
