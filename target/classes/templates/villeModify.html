@@ -13,7 +13,7 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<header th:replace="fragments/header.html"></header>
+	<header th:replace="fragments/header.html :: header"></header>
 	
 	<main class="container-fluid flex-fill">
 		<div class="container">
@@ -121,7 +121,7 @@
 		</div>
 	</main>
 	
-	<footer th:replace="fragments/footer.html"></footer>
+	<footer th:replace="fragments/footer.html :: footer"></footer>
 
 </body>
 </html>
